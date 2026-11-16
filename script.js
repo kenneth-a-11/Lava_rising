@@ -6,7 +6,8 @@ const PUSH_SHORT = 0;       // 1-4 letters
 const PUSH_MEDIUM = 5;      // 5-7 letters
 const PUSH_LONG = 15;       // 8+ letters
 const BONUS_LONG = 5;       // bonus points for 8+ letters
-const BASE_TIME = 15, MIN_TIME = 8;
+const BASE_TIME = 15,
+      MIN_TIME = 8;
 const KEY = "wordLavaHighScore";
 
 const $ = id => document.getElementById(id);
@@ -16,38 +17,89 @@ const show = name => {
   if (name !== "game") $("heat").style.opacity = 0.15;
 };
 
-let lava, round, score, used, current, timeLeft, roundTime, timerId, locked, lastCats = [];
+let lava,
+    round,
+    score,
+    used,
+    current,
+    timeLeft,
+    roundTime,
+    timerId,
+    locked,
+    lastCats = [];
 
 // ===== HIGH SCORE (localStorage) =====
-function getBest() { try { return parseInt(localStorage.getItem(KEY), 10) || 0; } catch (e) { return 0; } }
-function saveBest(v) { try { localStorage.setItem(KEY, String(v)); } catch (e) {} }
-function refreshBest() { const b = getBest(); $("hsStart").textContent = b; $("hsOver").textContent = b; $("best").textContent = b; }
+function getBest() {
+  try {
+    return parseInt(localStorage.getItem(KEY), 10) || 0;
+  } catch (e) {
+    return 0;
+  }
+}
+
+function saveBest(v) {
+  try {
+    localStorage.setItem(KEY, String(v));
+  } catch (e) {}
+}
+
+function refreshBest() {
+  const b = getBest();
+  $("hsStart").textContent = b;
+  $("hsOver").textContent = b;
+  $("best").textContent = b;
+}
 
 // ===== GAME FLOW =====
 function startGame() {
-  lava = 0; round = 0; score = 0; used = new Set(); lastCats = [];
-  updateHud(); show("game"); setTh(); nextRound();
+  lava = 0;
+  round = 0;
+  score = 0;
+  used = new Set();
+  lastCats = [];
+  updateHud();
+  show("game");
+  setTh();
+  nextRound();
 }
 
 function nextRound() {
   round++;
   locked = false;
+
   const choices = WORD_BANK.filter(c => !lastCats.includes(c.category));
   current = choices[Math.floor(Math.random() * choices.length)];
-  lastCats.push(current.category); if (lastCats.length > 2) lastCats.shift();
+  lastCats.push(current.category);
+  if (lastCats.length > 2) lastCats.shift();
   current.set = new Set(current.words.split(" "));
+
   roundTime = Math.max(MIN_TIME, BASE_TIME - Math.floor((round - 1) / 2));
   timeLeft = roundTime;
+
   $("category").textContent = current.category;
-  $("answer").value = ""; $("answer").disabled = false; $("submit").disabled = false;
+  $("answer").value = "";
+  $("answer").disabled = false;
+  $("submit").disabled = false;
   setMsg("", "");
-  updateHud(); drawTimer();
+  updateHud();
+  drawTimer();
   $("answer").focus();
+
   clearInterval(timerId);
-  timerId = setInterval(() => { timeLeft -= 0.1; drawTimer(); if (timeLeft <= 0) endRound(null); }, 100);
+  timerId = setInterval(() => {
+    timeLeft -= 0.1;
+    drawTimer();
+    if (timeLeft <= 0) endRound(null);
+  }, 100);
 }
 
-function normalize(w) { return w.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, ""); }
+function normalize(w) {
+  return w
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z]/g, "");
+}
 
 function submitWord() {
   if (locked) return;
@@ -61,15 +113,23 @@ function submitWord() {
 
 function reject(text) {
   setMsg(text, "bad");
-  const el = $("answer"); el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake");
+  const el = $("answer");
+  el.classList.remove("shake");
+  void el.offsetWidth;
+  el.classList.add("shake");
   el.select();
 }
 
 function endRound(word) {
-  locked = true; clearInterval(timerId);
-  $("answer").disabled = true; $("submit").disabled = true;
+  locked = true;
+  clearInterval(timerId);
+  $("answer").disabled = true;
+  $("submit").disabled = true;
+
   const rise = START_RISE + (round - 1) * RISE_PER_ROUND;
-  let push = 0, text;
+  let push = 0,
+      text;
+
   if (word) {
     const len = word.length;
     push = len >= 8 ? PUSH_LONG : len >= 5 ? PUSH_MEDIUM : PUSH_SHORT;
@@ -79,11 +139,16 @@ function endRound(word) {
   } else {
     text = "Time's up! The lava keeps rising.";
   }
+
   lava = Math.max(0, lava + rise - push);
   setMsg(text + ` Lava +${rise}%.`, push ? "good" : "bad");
   updateHud();
-  if (lava >= MAX_LAVA) { setTimeout(gameOver, 1400); }
-  else { setTimeout(nextRound, 1600); }
+
+  if (lava >= MAX_LAVA) {
+    setTimeout(gameOver, 1400);
+  } else {
+    setTimeout(nextRound, 1600);
+  }
 }
 
 function gameOver() {
@@ -104,13 +169,19 @@ function updateHud() {
   $("round").textContent = Math.max(round, 1);
   $("score").textContent = score;
 }
+
 function drawTimer() {
   const t = Math.max(0, timeLeft);
   $("time").textContent = Math.ceil(t);
   $("timerBar").style.width = (t / roundTime * 100) + "%";
   $("timerBar").style.background = t < 4 ? "var(--bad)" : "var(--molten)";
 }
-function setMsg(t, cls) { const m = $("msg"); m.textContent = t; m.className = "msg " + cls; }
+
+function setMsg(t, cls) {
+  const m = $("msg");
+  m.textContent = t;
+  m.className = "msg " + cls;
+}
 
 // ===== EVENTS =====
 $("startBtn").onclick = startGame;
@@ -118,27 +189,41 @@ $("howBtn").onclick = () => show("how");
 $("playBtn").onclick = startGame;
 $("againBtn").onclick = startGame;
 $("submit").onclick = submitWord;
-$("answer").addEventListener("keydown", e => { if (e.key === "Enter") submitWord(); });
+$("answer").addEventListener("keydown", e => {
+  if (e.key === "Enter") submitWord();
+});
 refreshBest();
 
 // ===== LAVA EFFECTS: bubbles in the pool + sparks above the surface =====
 const reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-function setTh() { $("lava").style.setProperty("--th", document.querySelector(".tower").clientHeight + "px"); }
+
+function setTh() {
+  $("lava").style.setProperty("--th", document.querySelector(".tower").clientHeight + "px");
+}
+
 window.addEventListener("resize", setTh);
 if (reduceMotion) document.querySelectorAll("animate").forEach(a => a.remove());
+
 function lavaFx() {
   if (reduceMotion || $("game").classList.contains("hidden")) return;
   const h = $("lava").offsetHeight;
   if (h < 10) return;
-  const b = document.createElement("span"), size = 5 + Math.random() * 11, d = 1.4 + Math.random() * 1.8;
+
+  const b = document.createElement("span"),
+        size = 5 + Math.random() * 11,
+        d = 1.4 + Math.random() * 1.8;
   b.className = "bubble";
   b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random() * 90}%;--d:${d}s;--h:${h * (0.3 + Math.random() * 0.6)}px`;
-  $("pool").appendChild(b); setTimeout(() => b.remove(), d * 1000);
+  $("pool").appendChild(b);
+  setTimeout(() => b.remove(), d * 1000);
+
   if (Math.random() < 0.6) {
     const s = document.createElement("span");
     s.className = "spark";
     s.style.cssText = `left:${8 + Math.random() * 84}%;bottom:${h}px;--d:1.6s;--x:${(Math.random() - 0.5) * 40}px`;
-    document.querySelector(".tower").appendChild(s); setTimeout(() => s.remove(), 1600);
+    document.querySelector(".tower").appendChild(s);
+    setTimeout(() => s.remove(), 1600);
   }
 }
+
 setInterval(lavaFx, 350);
