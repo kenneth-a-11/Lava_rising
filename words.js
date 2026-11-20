@@ -130,6 +130,191 @@ const WORD_BANK = [
       subanen, manobo, yakan, ibanag, ivatan
     `
   },
+  {
+    category: "Philippine Islands",
+    words: `
+      luzon, visayas, mindanao, palawan, mindoro, panay,
+      negros, samar, leyte, cebu, bohol, masbate,
+      marinduque, siquijor, camiguin, basilan, sulu, tawitawi,
+      catanduanes, romblon, guimaras, biliran, dinagat, siargao,
+      boracay, corregidor, mactan, lubang, batan, sabtang,
+      dumaran, busuanga, culion, balabac, polillo, bantayan,
+      malapascua, tablas, sibuyan, burias, ticao, camotes,
+      olango, pamilacan, samal
+    `
+  },
+  {
+    category: "Mountains, Lakes & Rivers",
+    words: `
+      mayon, taal, pinatubo, apo, pulag, kanlaon,
+      bulusan, makiling, banahaw, arayat, halcon, matutum,
+      isarog, iriga, malindang, kitanglad, hamiguitan, sierramadre,
+      cordillera, caraballo, lanao, sampaloc, buhi, bato,
+      naujan, mainit, lakesebu, pasig, cagayan, agusan,
+      pampanga, agno, abra, chico, marikina, magat,
+      tagoloan
+    `
+  },
+  {
+    category: "Filipino Family & Relatives",
+    words: `
+      nanay, tatay, kuya, ate, ditse, lolo,
+      lola, tito, tita, pinsan, bunso, panganay,
+      apo, ninong, ninang, kumpare, kumare, biyenan,
+      manugang, hipag, bayaw, anak, asawa, kapatid,
+      ina, ama, magulang, sanggol
+    `
+  },
+  {
+    category: "Filipino Slang & Expressions",
+    words: `
+      kilig, hugot, petmalu, lodi, charot, gigil,
+      tambay, sayang, pasalubong, diskarte, pasaway, kulit,
+      jowa, chika, bes, sis, pre, ewan,
+      ayos, susmaryosep, naku, aray, salamat, mabuhay,
+      mahal, pogi, ganda, kabayan, ingat, sige,
+      oks, tara, tamad, bahala
+    `
+  },
+  {
+    category: "Folklore & Mythical Creatures",
+    words: `
+      aswang, manananggal, tikbalang, kapre, duwende, tiyanak,
+      nuno, diwata, bakunawa, sirena, sigbin, engkanto,
+      santelmo, whitelady, bungisngis, mangkukulam, batibat, bathala,
+      mariamakiling, malakas, maganda, lamang, bernardocarpio
+    `
+  },
+  {
+    category: "Filipino Folk Dances",
+    words: `
+      tinikling, singkil, pandanggo, maglalatik, carinosa, itikitik,
+      subli, binasuan, kuratsa, pangalay, sayawsabangko, rigodon,
+      habanera, bulaklakan, sakuting, binanog, pandanggosailaw
+    `
+  },
+  {
+    category: "Musical Instruments",
+    words: `
+      kulintang, gabbang, kubing, agung, dabakan, tambuli,
+      bandurria, laud, octavina, kudyapi, tongali, palendag,
+      gangsa, suling, kalutang, rondalla, gitara, tambol
+    `
+  },
+  {
+    category: "Clothing & Crafts",
+    words: `
+      barongtagalog, baro, saya, terno, malong, tapis,
+      inabel, pina, sinamay, banig, bakya, salakot,
+      patadyong, tubao, kimona, camisa, tnalak, hablon,
+      balintawak, mariaclara, bayong
+    `
+  },
+  {
+    category: "Transportation",
+    words: `
+      jeepney, tricycle, pedicab, habalhabal, bangka, banca,
+      bangkero, lrt, mrt, bus, taxi, kalesa,
+      kuliglig, padyak, trike, ferry, roro, uv,
+      motorcycle, tren, barko, eroplano, sakay, terminal,
+      sidecar, skyway, nlex, slex, edsa
+    `
+  },
+  {
+    category: "Kitchen & Household Items",
+    words: `
+      kawali, kaldero, sandok, palayok, bayong, tabo,
+      walis, dustpan, banig, unan, kumot, lamesa,
+      upuan, bintana, pinto, kutsara, tinidor, plato,
+      baso, mangkok, pitsel, kalan, lusong, bangko,
+      duyan, basahan, timba, bilao, sangkalan, tsinelas
+    `
+  },
+  {
+    category: "Computer Hardware & Networking",
+    words: `
+      keyboard, monitor, mouse, motherboard, processor, ram,
+      harddrive, ssd, gpu, powersupply, cpu, router,
+      modem, switch, printer, scanner, webcam, speaker,
+      headset, flashdrive, laptop, desktop, server, bios,
+      firmware, heatsink, crimper, connector, utp, ethernet,
+      wifi, bluetooth, thermalpaste, cmos, casefan, lantester,
+      patchcord, firewall, ipaddress, subnet
+    `
+  },
+  {
+    category: "Programming & Web Terms",
+    words: `
+      html, css, javascript, python, variable, function,
+      loop, array, string, integer, boolean, browser,
+      database, syntax, compiler, debug, framework, api,
+      github, repository, commit, branch, merge, hosting,
+      domain, frontend, backend, bootstrap, react, json,
+      algorithm, operator, conditional, element, attribute, selector,
+      responsive, flexbox, viewport, localstorage, eventlistener, parameter,
+      object, method
+    `
+  },
+  {
+    category: "Education & Teaching Terms",
+    words: `
+      curriculum, lesson, syllabus, module, assessment, rubric,
+      objective, pedagogy, learner, teacher, classroom, portfolio,
+      inclusive, feedback, evaluation, matatag, tesda, competency,
+      cognitive, affective, psychomotor, bloom, taxonomy, formative,
+      summative, diagnostic, performance, lessonplan, differentiated, instruction,
+      strategy, motivation, mastery, literacy, numeracy, scaffolding,
+      inclusion, deped, ched
+    `
+  },
+  {
+    category: "Philippine Presidents",
+    words: `
+      aguinaldo, quezon, laurel, osmena, roxas, quirino,
+      magsaysay, garcia, macapagal, marcos, aquino, ramos,
+      estrada, arroyo, duterte
+    `
+  },
+  {
+    category: "Filipino Drinks",
+    words: `
+      sago, gulaman, salabat, barako, kapengbarako, tsokolate,
+      samalamig, sagogulaman, calamansijuice, melonjuice, mangoshake, pineapplejuice,
+      milktea, kape, gatas, tubig, bukojuice, bukopandan,
+      softdrinks, orangejuice, tsaa
+    `
+  },
+  {
+    category: "Famous Filipino Brands",
+    words: `
+      jollibee, manginasal, chowking, greenwich, goldilocks, redribbon,
+      maxs, mercurydrug, robinsons, ayala, cebupacific, pldt,
+      globe, smart, gcash, maya, bdo, bpi,
+      metrobank, luckyme, piattos, chippy, nova, skyflakes,
+      magnolia, purefoods, ligo, datuputi, silverswan, mangtomas,
+      bearbrand, alaska, milo, kopiko, oishi, selecta,
+      tapaking, bench, penshoppe
+    `
+  },
+  {
+    category: "National Symbols",
+    words: `
+      sampaguita, narra, mango, anahaw, bangus, carabao,
+      philippineeagle, arnis, sipa, bahaykubo, lupanghinirang, baybayin,
+      watawat, araw, bituin, pula, asul, puti,
+      dilaw
+    `
+  },
+  {
+    category: "Sports & Athletics",
+    words: `
+      basketball, volleyball, badminton, billiards, boxing, arnis,
+      eskrima, sipa, taekwondo, chess, swimming, athletics,
+      gilas, pba, uaap, seagames, sepaktakraw, futsal,
+      tennis, baseball, softball, karate, judo, wrestling,
+      weightlifting, archery, cycling, gymnastics, pickleball
+    `
+  },
 ];
 
 // Compatibility: strips the commas and line breaks, turning each block back into a

@@ -1,10 +1,6 @@
-# Word Lava
-Open `index.html` in a browser to play. For GitHub Pages: push this folder, then Settings > Pages > deploy from the main branch.
+A survival word game where players race against rising lava by typing the longest word that fits a random category. Longer words push the lava back, while short or wrong answers let it climb, and the game ends when the lava reaches the player. Summarise this data You’re currently signed i
 
-| File | Owner | What it does |
-|---|---|---|
-| index.html + style.css | Member 1 | Screens (start, instructions, game over), layout, responsive design |
-| script.js | Member 2 | Rounds, timer, lava rise, word checking |
-| words.js + high score in script.js | Member 3 | Word bank, scoring, localStorage high score |
-
-Difficulty settings are the constants at the top of `script.js`.
+GROUP 11 
+Edward Kenneth M. Nunag 
+Justin L. Palisoc
+Harold Chien S. Santiago
