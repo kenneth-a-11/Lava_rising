@@ -1,0 +1,264 @@
+/* ===== Word Lava: features.css (loaded after style.css) =====
+   Missed words, achievements, records, toasts, bot speech reactions, and mobile polish. */
+
+/* ----- game over: missed words + new achievements ----- */
+#missedCard,
+#achCard,
+.records-card {
+  width: 100%;
+}
+
+.missed-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: .5rem 0;
+}
+
+.mchip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--chip);
+  font-weight: 800;
+  font-size: .85rem;
+}
+
+.mchip small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.mchip.long {
+  border-color: var(--molten);
+  color: var(--molten);
+}
+
+.missed-note {
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+/* ----- records screen ----- */
+.ach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: .6rem;
+  width: 100%;
+  text-align: left;
+}
+
+.ach {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .6rem .8rem;
+  border-radius: .7rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  opacity: .6;
+  filter: grayscale(.7);
+}
+
+.ach.got {
+  opacity: 1;
+  filter: none;
+  border-color: var(--molten);
+}
+
+.ach-ico {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.ach small {
+  color: var(--muted);
+}
+
+#dailyInfo {
+  margin: 0;
+  min-height: 1.2rem;
+  font-size: .9rem;
+}
+
+/* locked themes */
+.diffbtn.locked {
+  opacity: .65;
+}
+
+/* ----- toasts ----- */
+#toasts {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  width: min(92vw, 26rem);
+  pointer-events: none;
+}
+
+.toast {
+  width: 100%;
+  padding: .6rem .9rem;
+  border-radius: .7rem;
+  border: 2px solid var(--molten);
+  background: var(--ash);
+  color: var(--bone);
+  font-weight: 800;
+  font-size: .9rem;
+  text-align: center;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .45);
+  animation: toastIn .3s ease-out, toastOut .4s ease-in 3.4s forwards;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(8px); }
+}
+
+/* ----- bot reactions: may wrap onto two lines (typing stays on one line) ----- */
+.speech.say {
+  white-space: normal;
+  line-height: 1.2;
+  font-size: .8rem;
+  letter-spacing: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}
+
+/* ===== MOBILE POLISH ===== */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+.btn,
+.diffbtn {
+  touch-action: manipulation;
+}
+
+.app {
+  min-height: 92vh;
+  min-height: 92dvh;
+}
+
+.set-card {
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+}
+
+body {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* keep the fixed corner buttons clear of notches and rounded corners */
+.mute {
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
+}
+
+.mute.gear {
+  right: calc(58px + env(safe-area-inset-right, 0px));
+}
+
+/* touch screens: 44px tap targets */
+@media (pointer: coarse) {
+  .mute {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mute.gear {
+    right: calc(64px + env(safe-area-inset-right, 0px));
+  }
+
+  .set-toggle,
+  .set-card .set-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .diffbtn {
+    min-height: 44px;
+  }
+}
+
+/* phones: leave room at the top for the corner buttons so they never cover the first lane */
+@media (max-width: 600px) {
+  body {
+    padding: 3.6rem .75rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* narrow phones: tighter lanes */
+@media (max-width: 400px) {
+  .lane {
+    grid-template-columns: 2.4rem 4.6rem 1fr;
+    column-gap: .5rem;
+  }
+
+  .lavatower {
+    height: 48px;
+  }
+
+  .feature-card {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .diffbtn {
+    min-width: 4.5rem;
+    padding: .5rem .8rem;
+  }
+
+  .ach-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* on-screen keyboard open (set by script.js): compact layout so the category, timer and input all fit */
+body.kbd .stats,
+body.kbd .panel > .label,
+body.kbd #featureHud,
+body.kbd #wordLog {
+  display: none;
+}
+
+body.kbd #arena {
+  gap: .3rem;
+  margin-bottom: .3rem;
+}
+
+body.kbd .lavatower {
+  height: 34px;
+}
+
+body.kbd #arena .face {
+  width: 2rem;
+  height: 2rem;
+}
+
+body.kbd .panel {
+  gap: .4rem;
+  padding: .6rem .8rem;
+}
+
+body.kbd .category {
+  font-size: 1.6rem;
+}
+
+body.kbd .msg {
+  min-height: 1.4rem;
+}

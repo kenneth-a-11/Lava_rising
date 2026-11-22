@@ -316,6 +316,96 @@
       `
     },
   ];
+// Extra categories. script.js loads this file automatically and adds them to WORD_BANK.
+// hard: true  -> hidden on Easy difficulty
+// pack: "fil" -> Filipino pack, can be switched off in Settings
+// Extra word content for Word Lava. Load AFTER words.js and BEFORE script.js.
+//
+//  1. Merges categories that share a name (words.js and its extras both define
+//     "Philippine Provinces", "Transportation" and "Musical Instruments").
+//  2. Removes stray tokens that came from multi-word entries ("nueva ecija" became two words).
+//  3. Adds new categories.
+//       hard: true  -> hidden on Easy, drawn 3x as often on Hard
+//       pack: "fil" -> Filipino/Tagalog pack, can be switched off in Settings
+(function () {
+  if (typeof WORD_BANK === "undefined" || WORD_BANK.__moreLoaded) return;
+  WORD_BANK.__moreLoaded = true;
+
+  const clean = s => s.toLowerCase().split(/[\s,]+/).map(w => w.replace(/[^a-z]/g, "")).filter(Boolean);
+  const unique = list => [...new Set(list)];
+
+  // ----- 1. merge duplicate category names -----
+  const byName = new Map(), merged = [];
+  WORD_BANK.forEach(c => {
+    const key = c.category.trim().toLowerCase(), first = byName.get(key);
+    if (!first) { byName.set(key, c); merged.push(c); return; }
+    first.words = unique([...clean(first.words), ...clean(c.words)]).join(" ");
+    if (!c.pack) delete first.pack;   // the merged category is only "pack" if every copy was
+    if (!c.hard) delete first.hard;
+  });
+  WORD_BANK.length = 0;
+  WORD_BANK.push(...merged);
+
+  // ----- 2. clean up stray tokens -----
+  const find = name => WORD_BANK.find(c => c.category === name);
+  const remove = (name, words) => {
+    const c = find(name), drop = new Set(words.split(" "));
+    if (c) c.words = clean(c.words).filter(w => !drop.has(w)).join(" ");
+  };
+  const extend = (name, words) => {
+    const c = find(name);
+    if (c) c.words = unique([...clean(c.words), ...clean(words)]).join(" ");
+  };
+  remove("Philippine Provinces", "nueva ecija tawi");
+  remove("Philippine Heroes and Places", "chocolate hills");
+  extend("Philippine Heroes and Places", "chocolatehills");
+  remove("Tagalog Animals", "ibis");
+  remove("Tagalog Colors", "langit");
+
+  // ----- 3. new categories -----
+  const add = (category, words, flags = {}) => {
+    if (find(category)) return extend(category, words);
+    WORD_BANK.push({ category, words: unique(clean(words)).join(" "), ...flags });
+  };
+
+  // standard (available on every difficulty)
+  add("Farm Animals", "cow pig sheep goat horse chicken duck goose turkey rooster hen donkey carabao lamb calf piglet bull ox rabbit pony mule llama foal kid ram ewe");
+  add("Insects & Creepy Crawlies", "ant bee wasp fly mosquito beetle butterfly moth dragonfly grasshopper cricket cockroach ladybug firefly caterpillar termite cicada mantis flea tick spider centipede locust hornet aphid weevil gnat scorpion");
+  add("Colors", "red blue green yellow orange purple pink brown black white gray grey violet indigo cyan magenta maroon crimson scarlet turquoise teal beige gold silver navy lavender lime olive coral peach");
+  add("Shapes", "circle square triangle rectangle oval diamond star heart hexagon pentagon octagon cube sphere cone cylinder pyramid crescent rhombus trapezoid prism arc spiral");
+  add("Clothes", "shirt pants shorts skirt dress jacket coat sweater hoodie socks shoes boots sandals slippers hat cap scarf gloves belt tie vest jeans blouse uniform pajamas raincoat underwear sneakers mittens");
+  add("Vegetables", "carrot potato tomato onion garlic cabbage lettuce spinach broccoli cucumber eggplant pepper pumpkin radish celery corn peas beans squash okra cauliflower ginger turnip beet kale mushroom");
+  add("Furniture", "chair table sofa couch bed desk shelf cabinet drawer wardrobe stool bench dresser mirror lamp bookcase ottoman cradle hammock futon recliner nightstand");
+  add("Tools", "hammer saw drill wrench pliers screwdriver chisel axe shovel rake hoe ladder level plane file clamp mallet crowbar sander trowel spade pickaxe wheelbarrow");
+  add("Birds", "eagle sparrow parrot owl hawk crow robin pigeon duck swan goose penguin ostrich flamingo peacock pelican falcon heron stork crane seagull woodpecker hummingbird kingfisher cockatoo canary vulture");
+  add("Rooms & Parts of a House", "kitchen bedroom bathroom garage attic basement hallway balcony porch garden nursery pantry laundry closet terrace patio rooftop stairs ceiling floor");
+  add("Fruits", "apple banana orange grape lemon lime peach pear plum cherry berry melon mango papaya kiwi fig date apricot coconut pineapple watermelon strawberry blueberry raspberry pomegranate guava");
+  add("At the Beach", "sand shell wave tide coral sunset towel umbrella sandcastle surfboard seaweed lighthouse dune pier island harbor lagoon snorkel anchor sunscreen seagull");
+  add("Desserts & Sweets", "cake pie cookie brownie donut candy chocolate pudding icecream cupcake muffin waffle pancake sundae custard fudge caramel tart macaron gelato popsicle cheesecake");
+
+  // hard tier (hidden on Easy, drawn more often on Hard)
+  add("World Capitals", "paris london madrid rome berlin lisbon dublin oslo stockholm helsinki copenhagen warsaw vienna brussels athens budapest bucharest sofia zagreb belgrade kyiv reykjavik bern amsterdam prague tokyo seoul beijing bangkok hanoi jakarta manila canberra ottawa cairo nairobi lima bogota delhi moscow ankara tehran baghdad riyadh", { hard: true });
+  add("Planets & Space", "mercury venus earth mars jupiter saturn uranus neptune pluto moon sun comet asteroid meteor galaxy nebula quasar orbit eclipse supernova telescope satellite cosmos constellation pulsar blackhole", { hard: true });
+  add("Gems & Minerals", "diamond ruby emerald sapphire opal topaz amethyst garnet jade pearl quartz onyx turquoise agate beryl zircon peridot citrine jasper obsidian malachite granite marble graphite", { hard: true });
+  add("Currencies", "peso dollar euro yen yuan won rupee ringgit baht dong pound franc krone rand real ruble dinar riyal shekel lira dirham zloty forint kyat", { hard: true });
+  add("Dinosaurs & Prehistoric Animals", "tyrannosaurus triceratops stegosaurus velociraptor brachiosaurus diplodocus ankylosaurus spinosaurus allosaurus pterodactyl mammoth mastodon megalodon iguanodon apatosaurus parasaurolophus brontosaurus dilophosaurus smilodon", { hard: true });
+  add("Famous Painters", "picasso monet vangogh davinci michelangelo rembrandt dali matisse warhol manet cezanne rubens vermeer goya klimt kahlo pollock renoir degas munch raphael botticelli amorsolo luna hidalgo magritte turner gauguin", { hard: true });
+  add("Organs & Body Systems", "heart lung liver kidney stomach brain intestine pancreas spleen bladder esophagus skeleton muscle artery vein nerve skin gallbladder thyroid appendix trachea diaphragm", { hard: true });
+  add("Math Words", "addition subtraction multiplication division fraction decimal percent integer prime factor multiple algebra geometry equation variable angle triangle radius diameter circumference perimeter area volume ratio average median mean mode exponent", { hard: true });
+  add("Languages of the World", "english spanish french german italian portuguese russian chinese japanese korean arabic hindi turkish dutch greek swahili vietnamese thai tagalog hebrew polish swedish norwegian", { hard: true });
+  add("Famous Landmarks", "eiffel eiffeltower colosseum pyramids stonehenge acropolis louvre bigben tajmahal greatwall statueofliberty goldengate machupicchu petra angkorwat sagradafamilia burjkhalifa empirestate kremlin alhambra leaningtower", { hard: true });
+
+  // Filipino / Tagalog pack
+  add("Tagalog Body Parts", "ulo buhok mukha mata ilong bibig dila ngipin tainga leeg balikat braso siko kamay daliri dibdib tiyan likod baywang hita tuhod binti paa sakong utak puso baga atay noo kilay pilikmata pisngi baba kuko", { pack: "fil" });
+  add("Gulay (Tagalog Vegetables)", "kangkong talong ampalaya sitaw kalabasa upo sayote labanos petsay pechay repolyo sibuyas bawang luya kamatis patatas karot okra mustasa malunggay togue singkamas gabi kamote mais", { pack: "fil" });
+  add("Tagalog Nature & Weather", "ulan hangin araw buwan bituin bundok dagat ilog bagyo ulap kidlat kulog baha init lamig lupa puno bulaklak damo buhangin alon langit apoy tubig bato", { pack: "fil" });
+  add("Tagalog Days & Months", "lunes martes miyerkules huwebes biyernes sabado linggo enero pebrero marso abril mayo hunyo hulyo agosto setyembre oktubre nobyembre disyembre", { pack: "fil" });
+  add("Tagalog Household", "bahay pinto bintana mesa upuan kama unan kumot tasa plato kutsara tinidor kutsilyo walis timba tabo sahig kisame bubong hagdan kusina banyo silid sala", { pack: "fil" });
+  add("Tagalog Polite Words", "salamat po opo hindi pasensya paumanhin kumusta paalam mabuhay pakiusap tabi magandangumaga magandanghapon magandanggabi magandangaraw walanganuman", { pack: "fil" });
+  add("Tagalog Verbs", "kain inom takbo lakad tulog gising upo tayo sulat basa tawa iyak sayaw kanta luto linis ligo laro bili benta punta uwi tingin dinig sigaw bulong tulong hanap", { pack: "fil", hard: true });
+  add("Tagalog Adjectives", "maganda pangit malaki maliit mataas mababa mabilis mabagal mainit malamig matamis maasim maalat mapait masaya malungkot galit takot matapang mabait masipag tamad mahal mura bago luma malinis marumi", { pack: "fil", hard: true });
+  add("Philippine Regions", "ilocos cagayanvalley centralluzon calabarzon mimaropa bicol westernvisayas centralvisayas easternvisayas zamboangapeninsula northernmindanao davao soccsksargen caraga barmm car ncr", { pack: "fil", hard: true });
+})();
 
   // Compatibility: strips the commas and line breaks, turning each block back into a
   // single space-separated string, so existing code that does words.split(" ") keeps working.

@@ -1,411 +1,197 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Word Lava</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Lava</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="features.css">
 </head>
 <body>
-
 <div id="heat"></div>
+
+<!-- SOUND ON/OFF (always visible). The settings gear is added next to it by script.js -->
+<button id="muteBtn" class="mute" type="button" aria-label="Mute sound" aria-pressed="false" title="Sound on/off">&#128266;</button>
 
 <main class="app">
 
   <!-- START SCREEN -->
   <section id="start" class="screen">
-
     <h1>Word Lava</h1>
     <p class="tag">Out-spell the rising lava. Philippine edition.</p>
 
-    <!-- CHARACTER SELECTION -->
-    <div class="character-selection">
-      <h3>Choose Your Character</h3>
-
-      <select id="characterSelect">
-        <option value="explorer">🧑‍🚀 Explorer</option>
-        <option value="warrior">🛡️ Warrior</option>
-        <option value="wizard">🧙 Wizard</option>
-        <option value="adventurer">🧗 Adventurer</option>
-        <option value="scientist">👨‍🔬 Scientist</option>
-      </select>
-
-      <p id="characterPreview">Selected: 🧑‍🚀 Explorer</p>
+    <p class="label">Difficulty</p>
+    <div id="diffPicker" class="diff" role="radiogroup" aria-label="Difficulty">
+      <button type="button" class="diffbtn" role="radio" data-diff="easy">Easy</button>
+      <button type="button" class="diffbtn" role="radio" data-diff="normal">Normal</button>
+      <button type="button" class="diffbtn" role="radio" data-diff="hard">Hard</button>
     </div>
+    <p id="diffDesc" class="diffdesc" aria-live="polite"></p>
+    <!-- the theme picker is inserted here by script.js -->
 
     <button id="startBtn" class="btn">Start</button>
+    <button id="dailyBtn" class="btn ghost">📅 Daily challenge</button>
+    <p id="dailyInfo" class="tag"></p>
     <button id="howBtn" class="btn ghost">How to play</button>
-    <button id="leaderboardBtn" class="btn ghost">🏆 Leaderboard</button>
-    <button id="settingsBtn" class="btn ghost">⚙️ Settings</button>
-
-    <p class="hs">
-      High score: <strong id="hsStart">0</strong>
-    </p>
-
+    <button id="recBtn" class="btn ghost">🏅 Records &amp; achievements</button>
+    <p class="hs">High score: <strong id="hsStart">0</strong></p>
+    <!-- the statistics card is appended here by script.js -->
   </section>
 
-
-  <!-- INSTRUCTIONS -->
+  <!-- HOW TO PLAY -->
   <section id="how" class="screen hidden">
-
     <h2>How to play</h2>
-
     <ol class="rules">
-      <li>Each round gives you a category.</li>
-      <li>Type the longest word that fits it, then press Enter.</li>
-      <li>1-4 letters: no push-back. 5-7 letters: lava drops a little. 8+ letters: lava drops a lot.</li>
-      <li>Wrong word, repeated word, or time's up: the lava keeps rising.</li>
-      <li>Each round the lava rises faster. If it reaches the top, you're out.</li>
-      <li>Use hints to help you find words.</li>
-      <li>Activate Double Points to earn extra score.</li>
-      <li>Pause the game whenever you need a break.</li>
+      <li><strong>Three players, three lava towers.</strong> You play against two bots, Juan and Maria. You take turns, and each player has their own lava level and score.</li>
+      <li><strong>Your turn:</strong> you get a category. Type a word that fits it and press Enter before the timer runs out. Each letter is worth 1 point, so longer words score more.</li>
+      <li><strong>The lava always creeps up a little</strong> on every turn, even after a correct word. Push it back with long words: 1-4 letters: no push-back. 5-7 letters: lava drops 5%. 8+ letters: lava drops 15% and you get +5 bonus points.</li>
+      <li><strong>Time's up = lava jumps.</strong> Run out of time and your lava jumps, and the jump gets bigger every round. A wrong or repeated word doesn't cost you anything, so keep trying until the timer ends.</li>
+      <li><strong>Combos:</strong> every correct word in a row builds your combo. Each 2 words add +1x to your multiplier, up to 5x. A time-out resets it.</li>
+      <li><strong>Boss rounds:</strong> every 5th round is a boss round. The player whose turn it is must find 2 words in one turn. Both words count for points and push-back.</li>
+      <li><strong>Disaster events:</strong> before some turns a random event hits, like Heat Wave or Lava Surge (extra lava), Cool Breeze (less lava), Volcanic Tremor (less time), Long Words Only or No Spark. Check the banner.</li>
+      <li><strong>Spark hint:</strong> once per game, spend 5 points to reveal the first letter and length of a valid word.</li>
+      <li><strong>Last Chance mode:</strong> when your lava reaches 90%, you get less time but all your points are doubled. Survive!</li>
+      <li><strong>Winning:</strong> if your lava reaches 100% you melt. The game ends when you melt or when both bots melt. Melt both bots to win!</li>
+      <li><strong>Daily challenge:</strong> everyone gets the same categories and events each day, always on Normal. Play on consecutive days to build a streak.</li>
+      <li><strong>Bots talk back:</strong> Juan and Maria react in their speech bubbles when they time out, take the lead, get hot or melt, and they gloat or sympathize when someone else melts.</li>
+      <li><strong>On a phone:</strong> when the keyboard opens, the screen switches to a compact layout so the category, timer and your input stay visible.</li>
+      <li><strong>Tip:</strong> open the gear button for volume, themes, screen shake and the Filipino pack. Some themes unlock through achievements.</li>
     </ol>
-
     <button id="playBtn" class="btn">Play</button>
-
+    <button id="backBtn" class="btn ghost">Back</button>
   </section>
 
-
-  <!-- LEADERBOARD -->
-  <section id="leaderboard" class="screen hidden">
-
-    <h2>🏆 Leaderboard</h2>
-
-    <p class="tag">Top players and their highest scores</p>
-
-    <div class="leaderboard-container">
-
-      <div class="leaderboard-header">
-        <span>Rank</span>
-        <span>Player</span>
-        <span>Score</span>
-      </div>
-
-      <div id="leaderboardList" class="leaderboard-list">
-
-        <div class="leaderboard-entry">
-          <span>1</span>
-          <span>---</span>
-          <span>0</span>
-        </div>
-
-        <div class="leaderboard-entry">
-          <span>2</span>
-          <span>---</span>
-          <span>0</span>
-        </div>
-
-        <div class="leaderboard-entry">
-          <span>3</span>
-          <span>---</span>
-          <span>0</span>
-        </div>
-
-      </div>
-
-    </div>
-
-    <button id="leaderboardBackBtn" class="btn">Back to Menu</button>
-
-  </section>
-
-
-  <!-- SETTINGS MENU -->
-  <section id="settings" class="screen hidden">
-
-    <h2>⚙️ Settings</h2>
-
-    <div class="settings-container">
-
-      <div class="setting-item">
-        <label for="musicToggle">Background Music</label>
-        <input type="checkbox" id="musicToggle" checked>
-      </div>
-
-      <div class="setting-item">
-        <label for="soundToggle">Sound Effects</label>
-        <input type="checkbox" id="soundToggle" checked>
-      </div>
-
-      <div class="setting-item">
-        <label for="animationToggle">Game Animations</label>
-        <input type="checkbox" id="animationToggle" checked>
-      </div>
-
-      <div class="setting-item">
-        <label for="settingsDifficulty">Difficulty</label>
-        <select id="settingsDifficulty">
-          <option value="easy">Easy</option>
-          <option value="normal" selected>Normal</option>
-          <option value="hard">Hard</option>
-        </select>
-      </div>
-
-    </div>
-
-    <button id="saveSettingsBtn" class="btn">Save Settings</button>
-    <button id="settingsBackBtn" class="btn ghost">Back to Menu</button>
-
-  </section>
-
-
-  <!-- GAME SCREEN -->
+  <!-- GAME -->
   <section id="game" class="screen hidden">
-
+    <!-- the three lava lanes (#arena) are inserted here by script.js -->
     <div class="board">
-
-      <!-- LAVA TOWER -->
       <div class="tower" aria-label="Lava level">
-
         <div class="you" title="You">&#129485;</div>
-
         <div class="lava" id="lava">
-
           <div class="surface"></div>
-
-          <div class="pool" id="pool">
-
-            <svg class="tex" viewBox="0 0 84 520" preserveAspectRatio="none" aria-hidden="true">
-
-              <defs>
-
-                <filter id="lavaFx" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-
-                  <feTurbulence
-                    type="fractalNoise"
-                    baseFrequency="0.03 0.018"
-                    numOctaves="4"
-                    seed="7"
-                    result="n">
-
-                    <animate
-                      attributeName="baseFrequency"
-                      dur="16s"
-                      values="0.03 0.018;0.036 0.024;0.03 0.018"
-                      repeatCount="indefinite"/>
-
-                  </feTurbulence>
-
-                  <feColorMatrix
-                    in="n"
-                    type="matrix"
-                    values="2.8 0 0 0 -0.9  2.8 0 0 0 -0.9  2.8 0 0 0 -0.9  0 0 0 0 1"
-                    result="c"/>
-
-                  <feComponentTransfer in="c">
-
-                    <feFuncR type="table" tableValues="0.18 0.55 0.95 1 1"/>
-                    <feFuncG type="table" tableValues="0.01 0.06 0.32 0.72 0.95"/>
-                    <feFuncB type="table" tableValues="0 0 0 0.05 0.25"/>
-
-                  </feComponentTransfer>
-
-                </filter>
-
-              </defs>
-
-              <rect width="84" height="520" filter="url(#lavaFx)"/>
-
-            </svg>
-
-          </div>
-
+          <div class="pool" id="pool"></div>
         </div>
-
         <span class="pct" id="pct">0%</span>
-
       </div>
-
-
-      <!-- GAME PANEL -->
       <div class="panel">
-
-        <!-- GAME STATS -->
         <div class="stats">
-
           <span>Round <strong id="round">1</strong></span>
           <span>Score <strong id="score">0</strong></span>
           <span>Best <strong id="best">0</strong></span>
-
         </div>
-
-
-        <!-- DOUBLE POINTS POWER-UP -->
-        <div class="powerup-area">
-
-          <div class="powerup-card" id="doublePointsCard">
-
-            <span class="powerup-icon">⚡</span>
-
-            <div>
-              <strong>Double Points</strong>
-              <p id="doublePointsStatus">Available</p>
-            </div>
-
-            <button id="doublePointsBtn" class="btn">
-              Activate
-            </button>
-
-          </div>
-
-          <p id="doublePointsTimer"></p>
-
-        </div>
-
-
-        <!-- CATEGORY -->
         <p class="label">Category</p>
-
         <h2 id="category" class="category">-</h2>
-
-
-        <!-- DISASTER EVENT DISPLAY -->
-        <div id="disasterEvent" class="disaster-event hidden" aria-live="polite">
-
-          <span id="disasterIcon">🌋</span>
-
-          <div>
-            <strong id="disasterTitle">Disaster Event</strong>
-            <p id="disasterDescription">A disaster is approaching!</p>
-          </div>
-
-        </div>
-
-
-        <!-- HINT SYSTEM -->
-        <div class="hint-area">
-
-          <button id="hintBtn" class="btn ghost">
-            💡 Get Hint
-          </button>
-
-          <p id="hintText" aria-live="polite">
-            Need help? Use a hint!
-          </p>
-
-          <span id="hintCount">Hints: 3</span>
-
-        </div>
-
-
-        <!-- COMBO AND STREAK -->
-        <div class="combo-area">
-
-          <span>🔥 Streak: <strong id="streak">0</strong></span>
-          <span>⚡ Combo: <strong id="combo">x1</strong></span>
-          <span>🏆 Bonus: <strong id="bonusPoints">0</strong></span>
-
-        </div>
-
-
-        <!-- TIMER -->
-        <div class="timer">
-          <div id="timerBar"></div>
-        </div>
-
-        <p class="time">
-          <span id="time">15</span>s
-        </p>
-
-
-        <!-- WORD INPUT -->
-        <input
-          id="answer"
-          type="text"
-          autocomplete="off"
-          autocapitalize="off"
-          spellcheck="false"
-          placeholder="Type the longest word...">
-
-        <button id="submit" class="btn">
-          Submit word
-        </button>
-
+        <div class="timer"><div id="timerBar"></div></div>
+        <p class="time"><span id="time">15</span>s</p>
+        <input id="answer" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the longest word...">
+        <button id="submit" class="btn">Submit word</button>
         <p id="msg" class="msg" aria-live="polite"></p>
-
-
-        <!-- PAUSE BUTTON -->
-        <button id="pauseBtn" class="btn ghost">
-          ⏸ Pause Game
-        </button>
-
       </div>
-
     </div>
-
   </section>
-
-
-  <!-- PAUSE MENU -->
-  <section id="pause" class="screen hidden">
-
-    <h2>⏸ Game Paused</h2>
-
-    <p class="tag">Take a break. The lava is waiting!</p>
-
-    <button id="resumeBtn" class="btn">
-      ▶ Resume Game
-    </button>
-
-    <button id="restartBtn" class="btn ghost">
-      🔄 Restart Game
-    </button>
-
-    <button id="pauseMenuBtn" class="btn ghost">
-      🏠 Main Menu
-    </button>
-
-  </section>
-
 
   <!-- GAME OVER -->
   <section id="over" class="screen hidden">
-
-    <h2>The lava got you</h2>
-
-    <p class="big">
-      <strong id="finalScore">0</strong> points
-    </p>
-
+    <h2 id="overTitle">The lava got you</h2>
+    <p class="big"><strong id="finalScore">0</strong> points</p>
     <p id="finalInfo" class="tag"></p>
+    <p class="hs">High score: <strong id="hsOver">0</strong></p>
+    <button id="againBtn" class="btn">Play again</button>
+    <button id="menuBtn" class="btn ghost">Main menu</button>
+    <!-- missed words, achievements, podium, tally and statistics cards are appended here by script.js -->
+  </section>
 
-    <p class="hs">
-      High score: <strong id="hsOver">0</strong>
-    </p>
-
-
-    <!-- ACHIEVEMENTS -->
-    <div class="achievement-section">
-
-      <h3>Achievements Unlocked</h3>
-
-      <div id="achievementList" class="achievement-list">
-        <p>No achievements unlocked yet.</p>
-      </div>
-
-    </div>
-
-
-    <button id="againBtn" class="btn">
-      Play again
-    </button>
-
-    <button id="overLeaderboardBtn" class="btn ghost">
-      🏆 View Leaderboard
-    </button>
-
+  <!-- RECORDS -->
+  <section id="records" class="screen hidden">
+    <h2>Records</h2>
+    <p id="recDaily" class="tag"></p>
+    <div id="boardCard" class="feature-card records-card"></div>
+    <h2>Achievements</h2>
+    <div id="achList" class="ach-grid"></div>
+    <button id="recBackBtn" class="btn">Back</button>
   </section>
 
 </main>
 
-
-<!-- LOAD JAVASCRIPT -->
-<!-- words.js must load before script.js -->
-
+<!-- Load each script exactly once, at the end of the body, in this order: words (it already includes the extra categories), script, banter. -->
 <script src="words.js"></script>
 <script src="script.js"></script>
+<script src="banter.js"></script>
 
+<!-- TEST CHECKLIST: hidden. Open it by adding #test to the address, or tap the title 5 times. Close with the button or Esc. -->
+<style>
+  #testPanel { position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center; padding: 1rem; background: var(--overlay); }
+  #testPanel.open { display: flex; }
+  #testPanel .tp-card { width: 100%; max-width: 30rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto; padding: 1.1rem; text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: .9rem; color: var(--bone); }
+  #testPanel h2 { text-align: center; margin-bottom: .6rem; }
+  #testPanel h3 { margin: 1rem 0 .3rem; color: var(--molten); font-size: 1rem; }
+  #testPanel label { display: flex; gap: .6rem; align-items: flex-start; padding: .35rem 0; line-height: 1.35; font-size: .9rem; cursor: pointer; }
+  #testPanel input[type="checkbox"] { width: 1.2rem; height: 1.2rem; flex: none; margin-top: .1rem; padding: 0; accent-color: var(--molten); }
+  #testPanel .tp-actions { display: flex; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
+  #testPanel .tp-actions .btn { flex: 1; min-width: 8rem; }
+  #testPanel .tp-count { text-align: center; color: var(--muted); font-size: .85rem; margin: 0; }
+</style>
+<div id="testPanel" role="dialog" aria-modal="true" aria-label="Test checklist">
+  <div class="tp-card">
+    <h2>🧪 Test checklist</h2>
+    <p class="tp-count" id="tpCount"></p>
+
+    <h3>📱 Mobile (real phone)</h3>
+    <label><input type="checkbox" data-t="m1"> Tap the answer box: keyboard opens, stats/HUD/word log hide, category + timer + input stay visible</label>
+    <label><input type="checkbox" data-t="m2"> Rotate the phone sideways and back: layout recovers</label>
+    <label><input type="checkbox" data-t="m3"> At about 360px wide: lanes don't overlap, gear and speaker buttons don't cover the first lane</label>
+    <label><input type="checkbox" data-t="m4"> Open the gear mid-game: game pauses, panel scrolls on a short screen</label>
+    <label><input type="checkbox" data-t="m5"> Last Chance (lava 90%+): red edge doesn't make the input hard to use</label>
+
+    <h3>🤖 Bot reactions</h3>
+    <label><input type="checkbox" data-t="b1"> Let a turn time out: a bot says a time-out line when it is the one timing out</label>
+    <label><input type="checkbox" data-t="b2"> A bot takes the score lead and says a lead line</label>
+    <label><input type="checkbox" data-t="b3"> A bot melts (try Hard): it says a melt line and the other bot reacts</label>
+    <label><input type="checkbox" data-t="b4"> You melt: the bots gloat</label>
+    <label><input type="checkbox" data-t="b5"> Long Tagalog lines wrap to two lines in the bubble, not cut off, also on narrow screens</label>
+
+    <h3>🏅 Long-term hook</h3>
+    <label><input type="checkbox" data-t="h1"> Win a game: Lava Master (and Cool Head with no time-outs) unlock</label>
+    <label><input type="checkbox" data-t="h2"> Daily challenge: same categories and events on a second run the same day</label>
+    <label><input type="checkbox" data-t="h3"> Finish a daily: records screen shows today's best and streak</label>
+    <label><input type="checkbox" data-t="h4"> Reach a 4x combo: Neon theme unlocks; defeat a boss: Forest unlocks</label>
+    <label><input type="checkbox" data-t="h5"> Top 10 list fills in on the records screen</label>
+
+    <div class="tp-actions">
+      <button type="button" class="btn ghost" id="tpReset">Clear ticks</button>
+      <button type="button" class="btn" id="tpClose">Close</button>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var KEY = "wordLavaTestTicks", panel = document.getElementById("testPanel"), boxes = panel.querySelectorAll("input[data-t]");
+    var ticks = {};
+    try { ticks = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+    function count() {
+      var n = 0; boxes.forEach(function (b) { if (b.checked) n++; });
+      document.getElementById("tpCount").textContent = n + " of " + boxes.length + " checked";
+    }
+    function saveTicks() {
+      var t = {}; boxes.forEach(function (b) { if (b.checked) t[b.dataset.t] = 1; });
+      try { localStorage.setItem(KEY, JSON.stringify(t)); } catch (e) {}
+      count();
+    }
+    boxes.forEach(function (b) { b.checked = !!ticks[b.dataset.t]; b.addEventListener("change", saveTicks); });
+    function open() { panel.classList.add("open"); count(); }
+    function close() { panel.classList.remove("open"); if (location.hash === "#test") history.replaceState(null, "", location.pathname + location.search); }
+    document.getElementById("tpClose").onclick = close;
+    document.getElementById("tpReset").onclick = function () { boxes.forEach(function (b) { b.checked = false; }); saveTicks(); };
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && panel.classList.contains("open")) close(); });
+    addEventListener("hashchange", function () { if (location.hash === "#test") open(); });
+    if (location.hash === "#test") open();
+    // 5 quick taps on the title also open it
+    var taps = 0, timer = null, title = document.querySelector("#start h1");
+    if (title) title.addEventListener("click", function () {
+      taps++; clearTimeout(timer); timer = setTimeout(function () { taps = 0; }, 1500);
+      if (taps >= 5) { taps = 0; open(); }
+    });
+  })();
+</script>
 </body>
 </html>
-```
