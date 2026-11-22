@@ -1,95 +1,411 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Word Lava</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Word Lava</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div id="heat"></div>
+
 <main class="app">
 
   <!-- START SCREEN -->
   <section id="start" class="screen">
+
     <h1>Word Lava</h1>
     <p class="tag">Out-spell the rising lava. Philippine edition.</p>
+
+    <!-- CHARACTER SELECTION -->
+    <div class="character-selection">
+      <h3>Choose Your Character</h3>
+
+      <select id="characterSelect">
+        <option value="explorer">🧑‍🚀 Explorer</option>
+        <option value="warrior">🛡️ Warrior</option>
+        <option value="wizard">🧙 Wizard</option>
+        <option value="adventurer">🧗 Adventurer</option>
+        <option value="scientist">👨‍🔬 Scientist</option>
+      </select>
+
+      <p id="characterPreview">Selected: 🧑‍🚀 Explorer</p>
+    </div>
+
     <button id="startBtn" class="btn">Start</button>
     <button id="howBtn" class="btn ghost">How to play</button>
-    <p class="hs">High score: <strong id="hsStart">0</strong></p>
+    <button id="leaderboardBtn" class="btn ghost">🏆 Leaderboard</button>
+    <button id="settingsBtn" class="btn ghost">⚙️ Settings</button>
+
+    <p class="hs">
+      High score: <strong id="hsStart">0</strong>
+    </p>
+
   </section>
+
 
   <!-- INSTRUCTIONS -->
   <section id="how" class="screen hidden">
+
     <h2>How to play</h2>
+
     <ol class="rules">
       <li>Each round gives you a category.</li>
-      <li>Type the <strong>longest word</strong> that fits it, then press Enter.</li>
+      <li>Type the longest word that fits it, then press Enter.</li>
       <li>1-4 letters: no push-back. 5-7 letters: lava drops a little. 8+ letters: lava drops a lot.</li>
       <li>Wrong word, repeated word, or time's up: the lava keeps rising.</li>
       <li>Each round the lava rises faster. If it reaches the top, you're out.</li>
+      <li>Use hints to help you find words.</li>
+      <li>Activate Double Points to earn extra score.</li>
+      <li>Pause the game whenever you need a break.</li>
     </ol>
+
     <button id="playBtn" class="btn">Play</button>
+
   </section>
 
-  <!-- GAME -->
+
+  <!-- LEADERBOARD -->
+  <section id="leaderboard" class="screen hidden">
+
+    <h2>🏆 Leaderboard</h2>
+
+    <p class="tag">Top players and their highest scores</p>
+
+    <div class="leaderboard-container">
+
+      <div class="leaderboard-header">
+        <span>Rank</span>
+        <span>Player</span>
+        <span>Score</span>
+      </div>
+
+      <div id="leaderboardList" class="leaderboard-list">
+
+        <div class="leaderboard-entry">
+          <span>1</span>
+          <span>---</span>
+          <span>0</span>
+        </div>
+
+        <div class="leaderboard-entry">
+          <span>2</span>
+          <span>---</span>
+          <span>0</span>
+        </div>
+
+        <div class="leaderboard-entry">
+          <span>3</span>
+          <span>---</span>
+          <span>0</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button id="leaderboardBackBtn" class="btn">Back to Menu</button>
+
+  </section>
+
+
+  <!-- SETTINGS MENU -->
+  <section id="settings" class="screen hidden">
+
+    <h2>⚙️ Settings</h2>
+
+    <div class="settings-container">
+
+      <div class="setting-item">
+        <label for="musicToggle">Background Music</label>
+        <input type="checkbox" id="musicToggle" checked>
+      </div>
+
+      <div class="setting-item">
+        <label for="soundToggle">Sound Effects</label>
+        <input type="checkbox" id="soundToggle" checked>
+      </div>
+
+      <div class="setting-item">
+        <label for="animationToggle">Game Animations</label>
+        <input type="checkbox" id="animationToggle" checked>
+      </div>
+
+      <div class="setting-item">
+        <label for="settingsDifficulty">Difficulty</label>
+        <select id="settingsDifficulty">
+          <option value="easy">Easy</option>
+          <option value="normal" selected>Normal</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button id="saveSettingsBtn" class="btn">Save Settings</button>
+    <button id="settingsBackBtn" class="btn ghost">Back to Menu</button>
+
+  </section>
+
+
+  <!-- GAME SCREEN -->
   <section id="game" class="screen hidden">
+
     <div class="board">
+
+      <!-- LAVA TOWER -->
       <div class="tower" aria-label="Lava level">
+
         <div class="you" title="You">&#129485;</div>
+
         <div class="lava" id="lava">
+
           <div class="surface"></div>
+
           <div class="pool" id="pool">
+
             <svg class="tex" viewBox="0 0 84 520" preserveAspectRatio="none" aria-hidden="true">
+
               <defs>
+
                 <filter id="lavaFx" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.03 0.018" numOctaves="4" seed="7" result="n">
-                    <animate attributeName="baseFrequency" dur="16s" values="0.03 0.018;0.036 0.024;0.03 0.018" repeatCount="indefinite"/>
+
+                  <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0.03 0.018"
+                    numOctaves="4"
+                    seed="7"
+                    result="n">
+
+                    <animate
+                      attributeName="baseFrequency"
+                      dur="16s"
+                      values="0.03 0.018;0.036 0.024;0.03 0.018"
+                      repeatCount="indefinite"/>
+
                   </feTurbulence>
-                  <feColorMatrix in="n" type="matrix" values="2.8 0 0 0 -0.9  2.8 0 0 0 -0.9  2.8 0 0 0 -0.9  0 0 0 0 1" result="c"/>
+
+                  <feColorMatrix
+                    in="n"
+                    type="matrix"
+                    values="2.8 0 0 0 -0.9  2.8 0 0 0 -0.9  2.8 0 0 0 -0.9  0 0 0 0 1"
+                    result="c"/>
+
                   <feComponentTransfer in="c">
+
                     <feFuncR type="table" tableValues="0.18 0.55 0.95 1 1"/>
                     <feFuncG type="table" tableValues="0.01 0.06 0.32 0.72 0.95"/>
                     <feFuncB type="table" tableValues="0 0 0 0.05 0.25"/>
+
                   </feComponentTransfer>
+
                 </filter>
+
               </defs>
+
               <rect width="84" height="520" filter="url(#lavaFx)"/>
+
             </svg>
+
           </div>
+
         </div>
+
         <span class="pct" id="pct">0%</span>
+
       </div>
+
+
+      <!-- GAME PANEL -->
       <div class="panel">
+
+        <!-- GAME STATS -->
         <div class="stats">
+
           <span>Round <strong id="round">1</strong></span>
           <span>Score <strong id="score">0</strong></span>
           <span>Best <strong id="best">0</strong></span>
+
         </div>
+
+
+        <!-- DOUBLE POINTS POWER-UP -->
+        <div class="powerup-area">
+
+          <div class="powerup-card" id="doublePointsCard">
+
+            <span class="powerup-icon">⚡</span>
+
+            <div>
+              <strong>Double Points</strong>
+              <p id="doublePointsStatus">Available</p>
+            </div>
+
+            <button id="doublePointsBtn" class="btn">
+              Activate
+            </button>
+
+          </div>
+
+          <p id="doublePointsTimer"></p>
+
+        </div>
+
+
+        <!-- CATEGORY -->
         <p class="label">Category</p>
+
         <h2 id="category" class="category">-</h2>
-        <div class="timer"><div id="timerBar"></div></div>
-        <p class="time"><span id="time">15</span>s</p>
-        <input id="answer" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the longest word...">
-        <button id="submit" class="btn">Submit word</button>
+
+
+        <!-- DISASTER EVENT DISPLAY -->
+        <div id="disasterEvent" class="disaster-event hidden" aria-live="polite">
+
+          <span id="disasterIcon">🌋</span>
+
+          <div>
+            <strong id="disasterTitle">Disaster Event</strong>
+            <p id="disasterDescription">A disaster is approaching!</p>
+          </div>
+
+        </div>
+
+
+        <!-- HINT SYSTEM -->
+        <div class="hint-area">
+
+          <button id="hintBtn" class="btn ghost">
+            💡 Get Hint
+          </button>
+
+          <p id="hintText" aria-live="polite">
+            Need help? Use a hint!
+          </p>
+
+          <span id="hintCount">Hints: 3</span>
+
+        </div>
+
+
+        <!-- COMBO AND STREAK -->
+        <div class="combo-area">
+
+          <span>🔥 Streak: <strong id="streak">0</strong></span>
+          <span>⚡ Combo: <strong id="combo">x1</strong></span>
+          <span>🏆 Bonus: <strong id="bonusPoints">0</strong></span>
+
+        </div>
+
+
+        <!-- TIMER -->
+        <div class="timer">
+          <div id="timerBar"></div>
+        </div>
+
+        <p class="time">
+          <span id="time">15</span>s
+        </p>
+
+
+        <!-- WORD INPUT -->
+        <input
+          id="answer"
+          type="text"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="Type the longest word...">
+
+        <button id="submit" class="btn">
+          Submit word
+        </button>
+
         <p id="msg" class="msg" aria-live="polite"></p>
+
+
+        <!-- PAUSE BUTTON -->
+        <button id="pauseBtn" class="btn ghost">
+          ⏸ Pause Game
+        </button>
+
       </div>
+
     </div>
+
   </section>
+
+
+  <!-- PAUSE MENU -->
+  <section id="pause" class="screen hidden">
+
+    <h2>⏸ Game Paused</h2>
+
+    <p class="tag">Take a break. The lava is waiting!</p>
+
+    <button id="resumeBtn" class="btn">
+      ▶ Resume Game
+    </button>
+
+    <button id="restartBtn" class="btn ghost">
+      🔄 Restart Game
+    </button>
+
+    <button id="pauseMenuBtn" class="btn ghost">
+      🏠 Main Menu
+    </button>
+
+  </section>
+
 
   <!-- GAME OVER -->
   <section id="over" class="screen hidden">
+
     <h2>The lava got you</h2>
-    <p class="big"><strong id="finalScore">0</strong> points</p>
+
+    <p class="big">
+      <strong id="finalScore">0</strong> points
+    </p>
+
     <p id="finalInfo" class="tag"></p>
-    <p class="hs">High score: <strong id="hsOver">0</strong></p>
-    <button id="againBtn" class="btn">Play again</button>
+
+    <p class="hs">
+      High score: <strong id="hsOver">0</strong>
+    </p>
+
+
+    <!-- ACHIEVEMENTS -->
+    <div class="achievement-section">
+
+      <h3>Achievements Unlocked</h3>
+
+      <div id="achievementList" class="achievement-list">
+        <p>No achievements unlocked yet.</p>
+      </div>
+
+    </div>
+
+
+    <button id="againBtn" class="btn">
+      Play again
+    </button>
+
+    <button id="overLeaderboardBtn" class="btn ghost">
+      🏆 View Leaderboard
+    </button>
+
   </section>
 
 </main>
 
-<!-- Load each script exactly once, at the end of the body. words.js must come first. -->
+
+<!-- LOAD JAVASCRIPT -->
+<!-- words.js must load before script.js -->
+
 <script src="words.js"></script>
 <script src="script.js"></script>
+
 </body>
 </html>
+```
