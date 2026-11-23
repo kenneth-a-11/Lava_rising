@@ -66,8 +66,10 @@ const show = name => {
     bgStop();
   }
 };
-const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
-const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+// every saved value is stored per account: "wl:<username>:<key>" (WL_USER is set by auth.js, "guest" if missing)
+const uk = k => "wl:" + (window.WL_USER || "guest") + ":" + k;
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(uk(k))) ?? d; } catch (e) { return d; } };
+const save = (k, v) => { try { localStorage.setItem(uk(k), JSON.stringify(v)); } catch (e) {} };
 const pushFor = len => len >= 8 ? PUSH_LONG : len >= 5 ? PUSH_MEDIUM : 0;
 const normalize = w => w.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, "");
 const rand = (a, b) => a + Math.random() * (b - a);
