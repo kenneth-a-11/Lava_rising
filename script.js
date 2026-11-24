@@ -17,6 +17,7 @@ const DIFFICULTY = {
   easy:   { label: "Easy",   acc: 0.8,  speed: 1.4, think: 1.3,  rise: 0.7, time: 3,  desc: "Slower, less accurate bots. Lava creeps slowly, you get extra time, and the toughest categories are left out." },
   normal: { label: "Normal", acc: 1,    speed: 1,   think: 1,    rise: 1,   time: 0,  desc: "The standard Word Lava challenge." },
   hard:   { label: "Hard",   acc: 1.15, speed: 0.8, think: 0.75, rise: 1.3, time: -2, desc: "Sharp, fast bots. Lava rises quickly, the timer is shorter, and the toughest categories show up often." }
+  insane: { label: "Insane", acc: 1.3, speed: 0.6, think: 0.5, rise: 1.5, time: -4, desc: "The ultimate challenge! Bots are lightning fast and accurate, lava rises like a geyser, and the timer is brutal." }
 };
 
 const EVENTS = [
